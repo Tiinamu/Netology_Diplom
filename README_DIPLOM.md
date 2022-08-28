@@ -37,6 +37,7 @@ __1. Регистрация доменного имени__
 *Решение:*
 
 Зарегистрировано доменное имя tiinamu.ru в регистраторе доменных имен REG.RU
+
 ![d_1](pictures/d_1.JPG) 
 
 __2. Создание инфраструктуры__
@@ -83,6 +84,7 @@ artem@ubuntu:~/.ssh$ ssh-keygen -t rsa
 ![d_2](pictures/d_2.JPG) 
 
 2.1.2)	Скопируем публичный ключ в authorized_keys
+
 ![d_3](pictures/d_3.JPG) 
 
 2.1.3)	Создадим файлик с ключом для сервисного аккаунта: key.json:
@@ -189,6 +191,7 @@ artem@ubuntu:~/Netology_7_3_test/terraform$ sudo terraform apply
 2.8)	Далее настраиваем рабочий проект artem@ubuntu:~/Netology_Diplom/terraform$ (меняем имена сети и подсети, добавим двойку в суффикс, чтобы имена не пересекались с сетью и подсетью, используемые при создании бакета).
 
 Создаем файлы проекта terraform (key.json создан ранее):
+
 ![d_5](pictures/d_5.JPG) 
 
 2.9)	Запуск боевого terraform-а:
@@ -198,17 +201,21 @@ artem@ubuntu:~/Netology_Diplom/terraform$ terraform apply
 ```
 
 2.10)	В UI Yandex Cloud видим, что ВМ создались (по итогам проекта):
+
 ![d_6](pictures/d_6.JPG) 
 
 ![d_7](pictures/d_7.JPG) 
 
 2.11)	DNS-серверы оставил от REG.RU
+
 ![d_8](pictures/d_8.JPG)
 
 2.12)	Для того, чтобы каждый разе не перенаправлять А-записи на новый публичный адрес сервера, играющего роль revers-proxy, я арендовал один публичный адрес на Yandex Cloud:
+
 ![d_8_5](pictures/d_8_5.JPG)
 
 2.13)	Настроим А-записи в REG.RU:
+
 ![d_9](pictures/d_9.JPG)
 
 2.14)	Проверим подключение к серверу с ролью reverse-proxy – nginx.tiinamu.ru
@@ -345,9 +352,11 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 4.2)	Дополним Playbook ролью mysql-role, добавим tasks, дополним inventory и provision.yml
 
 4.3)	Зайдем на сервер mysql1.tiinamu.ru, проверим корректность запущенной службы:
+
 ![d_11](pictures/d_11.JPG)
 
 4.4)	Проверим, что создалась БД wordpress:
+
 ![d_12](pictures/d_12.JPG)
 
 4.5)	На mysql2.tiinamu.ru действия аналогичные.
@@ -382,6 +391,7 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 5.2)	Дополним Playbook ролью mysql-role, добавим tasks, дополним inventory и provision.yml
 
 5.3)	Проверим в браузере, как открывается URL https://www.tiinamu.ru
+
 ![d_13](pictures/d_13.JPG)
 
 __6. Установка Gitlab CE и Gitlab Runner__
@@ -419,6 +429,7 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 Для доступа на gitlab.tiinamu.ru – {root/EgT2vcmVW!ql1}. К runner подключение автоматически через gitlab_runner_token: "GR1348741mwxxg9ekV2nEgT2vcmVW"
 
 5.3)	Проверим в браузере, как открывается URL https://gitlab.tiinamu.ru
+
 ![d_14](pictures/d_14.JPG)
 
 ![d_15](pictures/d_15.JPG)
@@ -462,6 +473,7 @@ __7. Установка Prometheus, Alert Manager, Node Exporter и Grafana__
 *Решение:*
 
 Принцип мониторинга будет следующий:
+
 ![d_17](pictures/d_17.JPG)
 
 7.1)	Добавим ВМ через terraform: 
@@ -472,21 +484,27 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 7.2)	Дополним Playbook ролями alertmanager-role, prometheus-role, grafana-role, node_exporter-role, добавим соответствующие tasks, дополним inventory и provision.yml
 
 7.3) 	После установки node exporter на каждом сервере проверим корректность запуска службы (ниже пример для сервера nginx):
+
 ![d_18](pictures/d_18.JPG)
 
 7.4)	Проверим доступность серверов по порту 9100, чтобы собирать метрики через Node exporter:
+
 ![d_19](pictures/d_19.JPG)
 
 7.5)	Проверим в браузере, как открывается URL https://prometheus.tiinamu.ru
+
 ![d_20](pictures/d_20.JPG)
 
 7.6)	Проверим в браузере, как открывается URL https://alertmanager.tiinamu.ru
+
 ![d_21](pictures/d_21.JPG)
 
 7.7)	Если зайти на сервер мониторинга по порту 9100, то можно посмотреть всем метрики, которые собираются
+
 ![d_22](pictures/d_22.JPG)
 
 7.8)	Проверим в браузере, как открывается URL https://grafana.tiinamu.ru
+
 ![d_23](pictures/d_23.JPG)
 
 ![d_24](pictures/d_24.JPG)
