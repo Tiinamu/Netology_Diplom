@@ -357,6 +357,7 @@ __5. Установка WordPress__
 *Рекомендации:*
 
 • Имя сервера: app.you.domain
+
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
 *Цель:*
@@ -367,8 +368,7 @@ __5. Установка WordPress__
 *Ожидаемые результаты:*
 
 1.	Виртуальная машина на которой установлен WordPress и Nginx/Apache (на ваше усмотрение).
-2.	В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy:
-•	https://www.you.domain (WordPress)
+2.	В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy: https://www.you.domain (WordPress)
 3.	На сервере you.domain отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен WordPress.
 В браузере можно открыть URL https://www.you.domain и увидеть главную страницу WordPress.
 
@@ -389,6 +389,7 @@ __6. Установка Gitlab CE и Gitlab Runner__
 *Рекомендации:*
 
 • Имена серверов: gitlab.you.domain и runner.you.domain
+
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
 *Цель:*
@@ -429,6 +430,7 @@ __7. Установка Prometheus, Alert Manager, Node Exporter и Grafana__
 *Рекомендации:*
 
 • Имя сервера: monitoring.you.domain
+
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
 *Цель:*
@@ -439,9 +441,13 @@ __7. Установка Prometheus, Alert Manager, Node Exporter и Grafana__
 
 1.	Интерфейсы Prometheus, Alert Manager и Grafana доступны по https.
 2.	В вашей доменной зоне настроены A-записи на внешний адрес reverse proxy:
+
 • https://grafana.you.domain (Grafana)
+
 • https://prometheus.you.domain (Prometheus)
+
 • https://alertmanager.you.domain (Alert Manager)
+
 3.	На сервере you.domain отредактированы upstreams для выше указанных URL и они смотрят на виртуальную машину на которой установлены Prometheus, Alert Manager и Grafana.
 4.	На всех серверах установлен Node Exporter и его метрики доступны Prometheus.
 5.	У Alert Manager есть необходимый набор правил для создания алертов.
