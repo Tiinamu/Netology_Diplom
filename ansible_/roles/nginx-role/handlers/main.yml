@@ -1,0 +1,13 @@
+---
+# handlers file for nginx-rol (proxy_server)
+- name: nginx systemd
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: nginx reload
+  systemd:
+    name: nginx
+    enabled: yes
+    state: reloaded

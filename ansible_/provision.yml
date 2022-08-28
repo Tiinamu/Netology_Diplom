@@ -1,0 +1,55 @@
+---
+#- hosts: nginx-host
+#  become: yes
+#  become_user: root
+#  remote_user: ubuntu
+#  become_method: sudo
+#  roles:
+#    - nginx-role
+#    - node_exporter-role
+
+#- hosts: mysql1-host mysql2-host
+#  become: true
+#  become_user: root
+#  become_method: sudo
+#  roles:
+#    - mysql-role
+#    - node_exporter-role 
+
+#- hosts: wordpress-host
+#  become: yes
+#  become_user: root
+#  remote_user: ubuntu
+#  become_method: sudo
+#  roles:
+#    - wordpress-role
+#    - node_exporter-role
+
+- hosts: gitlab-host
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+#    - gitlab-role
+    - node_exporter-role
+##  environment:
+##    GITLAB_ROOT_PASSWORD: "{{ gitlab_initial_root_password }}"
+##    GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ gitlab_runners_registration_token }}"
+
+#- hosts: runner-host
+#  become: true
+#  become_user: root
+#  become_method: sudo
+#  roles:
+#    - runner-role
+#    - node_exporter-role
+
+#- hosts: monitoring-host
+#  become: true
+#  become_user: root
+#  become_method: sudo
+#  roles:
+#    - prometheus-role
+#    - alertmanager-role
+#    - grafana-role
+#    - node_exporter-role

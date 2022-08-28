@@ -1,0 +1,26 @@
+---
+# defaults file for gitlab
+gitlab_domain: tiinamu.ru
+gitlab_external_url: "http://{{ gitlab_domain }}/"
+gitlab_edition: "gitlab-ce"
+gitlab_config_template: "gitlab.rb.j2"
+gitlab_repository_installation_script_url: "https://packages.gitlab.com/install/repositories/gitlab/{{ gitlab_edition }}/script.deb.sh"
+#подумать удалить
+gitlab_version: ''
+gitlab_package_version_separator: '='
+
+# Dependencies.
+gitlab_dependencies:
+  - postfix
+  - curl
+  - tzdata
+
+# Optional settings.
+gitlab_time_zone: "UTC"
+gitlab_default_theme: '2'
+
+# GitLab root password after install
+gitlab_root_pass: "EgT2vcmVW!ql1"
+
+# GitLab runner token after install
+gitlab_runner_token: "GR1348741mwxxg9ekV2nEgT2vcmVW"

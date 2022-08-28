@@ -1,0 +1,31 @@
+---
+# tasks file for ngingx-role (proxy_server)
+
+#- name: Create directory for ssh-keys
+#  file: state=directory mode=0700 dest=/home/ubuntu/.ssh/
+#- name: Adding rsa-key in /home/ubuntu/.ssh/authorized_keys
+#  copy: src=/home/artem/.ssh/id_rsa.pub dest=/home/ubuntu/.ssh/authorized_keys owner=root mode=0600
+#  ignore_errors: yes
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+ 
+- name: Install Nginx Web Server on Ubuntu VM
+  apt:
+    name=nginx
+    state=latest
+  when:
+    ansible_os_family == "Debian"
+  notify:
+    - nginx systemd
+  register:
+    nginxinstalled
+
+- name: Install ssl-cert
+  apt:
+    name:
+      - ssl-cert
+    state: present
+
+- include_tasks: letsencrypt.yml

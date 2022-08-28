@@ -1,0 +1,25 @@
+---
+# tasks file  
+- name: Adding gpg key
+  become: true
+  shell: curl https://packages.grafana.com/gpg.key | sudo apt-key add -
+
+- name: Adding repository 
+  become: true
+  apt_repository:
+    repo: deb https://packages.grafana.com/oss/deb stable main
+    state: present
+
+- name: Installing grafana
+  become: true
+  apt: 
+    name: grafana
+    state: present
+    update_cache: yes
+
+- name: Enabling and starting grafana service
+  become: true
+  service:
+    name: grafana-server
+    enabled: yes
+    state: started

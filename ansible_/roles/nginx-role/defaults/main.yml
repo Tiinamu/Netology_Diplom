@@ -1,0 +1,32 @@
+---
+# defaults file for proxy_server
+nginx_revproxy_sites:
+  www.tiinamu.ru:
+    domains:
+      - www.tiinamu.ru
+      - tiinamu.ru
+    upstreams:
+      - { backend_address: "{{ lookup ('env', 'vm_app_private') }}", backend_port: 80 }   #app_to_www
+    ssl: true
+    letsencrypt: true
+    letsencrypt_email: "devops@tiinamu.ru"
+
+  grafana.tiinamu.ru:
+    domains:
+      - grafana.tiinamu.ru
+    upstreams:
+      - { backend_address: "{{ lookup ('env', 'vm_monitoring_private') }}", backend_port: 3000 }  #monitoring_grafana
+    ssl: true
+    letsencrypt: true
+    letsencrypt_email: "devops@tiinamu.ru"
+  prometheus.tiinamu.ru:
+    domains:
+      - prometheus.tiinamu.ru
+    upstreams:
+      - { backend_address: "{{ lookup ('env', 'vm_monitoring_private') }}", backend_port: 9090 }  #monitoring_prometheus
+    ssl: true
+    letsencrypt: true
+    letsencrypt_email: "devops@tiinamu.ru"
+  alertmanager.tiinamu.ru:
+    domains:
+      - alertmanager.tiinamu.ru

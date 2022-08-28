@@ -1,0 +1,96 @@
+---
+- name: Update remote system
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Create group
+  become: true
+  group:
+    name: prometheus
+    system: true
+    state: present
+
+- name: Create service user
+  become: true
+  user:
+    name: prometheus
+    create_home: no
+    shell: "/usr/sbin/nologin"
+    group: prometheus
+
+- name: Create directories for service prometheus
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+  with_items:
+    - '/tmp/prometheus'
+    - '/etc/prometheus'
+    - '/var/lib/prometheus'
+
+- name: Download source files
+  become: true
+  unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v2.36.2/prometheus-2.36.2.linux-amd64.tar.gz
+    dest: /tmp/prometheus
+    creates: /tmp/prometheus/prometheus-2.36.2.linux-amd64
+    remote_src: yes
+
+- name: Copy source files
+  become: true
+  copy: 
+    src: /tmp/prometheus/prometheus-2.36.2.linux-amd64/{{ item }}
+    dest: /usr/local/bin/
+    remote_src: yes
+    mode: preserve
+    owner: prometheus
+    group: prometheus
+  with_items:
+    - 'prometheus'
+    - 'promtool' 
+
+- name: Copy config files
+  become: true
+  copy: 
+    src: /tmp/prometheus/prometheus-2.36.2.linux-amd64/{{ item }}
+    dest: /etc/prometheus/
+    remote_src: yes
+    mode: preserve
+    owner: prometheus
+    group: prometheus
+  with_items: 
+    - 'console_libraries'
+    - 'consoles'
+    - 'prometheus.yml' 
+
+- name: Create systemd service
+  become: true
+  template:
+    src: templates/prometheus.service
+    dest: /etc/systemd/system/
+
+- name: Reload systemd
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Copy config files
+  become: true
+  template:
+    src: templates/{{ item }}
+    dest: /etc/prometheus/
+  with_items:
+    - 'prometheus.yml'
+    - 'alert.yml'
+
+- name: Start service
+  become: true
+  systemd:
+    name: prometheus
+    state: started
+    enabled: yes
+
+

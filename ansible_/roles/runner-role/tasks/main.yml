@@ -1,0 +1,70 @@
+---
+# tasks file for runner
+- name: Update apt cache.
+  apt: update_cache=yes
+
+- name: Install git
+  become: true
+  package:
+    name: "git"
+    state: present
+    update_cache: yes
+
+- name: Download the binary for your system
+  become: true
+  command: "curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
+##  command: 'curl -L --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/binaries/gitlab-runner-darwin-linux-amd64"'
+
+
+
+- name: Give it permission to execute
+  become: true
+  command: "chmod +x /usr/local/bin/gitlab-runner"
+
+- name: Install GitLab Runner
+  become: true
+  command: "useradd --comment 'GitLab Runner' --create-home runner --shell /bin/bash"
+
+- name: Install and run as a service
+  become: true
+##  command: "gitlab-runner install --user=runner --working-directory=/home/runner"
+  command: "gitlab-runner install --user=runner --working-directory=/home/ubuntu"
+
+
+- name: Start runner
+  become: true
+  command: "gitlab-runner start"
+
+- name: Register runner
+  become: true
+  shell: gitlab-runner register \
+    --non-interactive \
+    --url "http://gitlab.{{ domain }}/" \
+    --registration-token "{{ gitlab_runner_token }}" \
+    --description "codechecker" \
+    --executor "shell"
+
+- name: Create directory for runner ssh keys
+  become: true
+  file:
+##    name: /home/runner/.ssh/
+    name:  /home/ubuntu/.ssh/
+    state: directory
+
+##- name: Copy id_rsa files
+##  become: true
+##  template:
+##    src: templates/{{ item }}
+##    dest: /home/runner/.ssh/
+##  with_items:
+##    - id_rsa.pub
+##    - id_rsa
+- name: Copy id_rsa
+  copy: src=/home/artem/.ssh/id_rsa.pub dest=/home/ubuntu/.ssh/id_rsa.pub
+  copy: src=/home/artem/.ssh/id_rsa     dest=/home/ubuntu/.ssh/id_rsa
+
+
+- name: move .bash_logout
+  become: true
+  shell: >
+    rm /home/ubuntu/.bash_logout

@@ -1,0 +1,34 @@
+[nginx-host]
+tiinamu.ru ansible_host=51.250.73.164
+[nginx-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+
+[mysql1-host]
+mysql1.tiinamu.ru ansible_host=192.168.102.6 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub mysql_server_id=1 mysql_replication_role=master
+[mysql1-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'
+
+[mysql2-host]
+mysql2.tiinamu.ru ansible_host=192.168.102.7 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub mysql_server_id=2 mysql_replication_role=slave
+[mysql2-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'
+
+[wordpress-host]
+wordpress.tiinamu.ru ansible_host=192.168.102.8 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub 
+[wordpress-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'
+
+[gitlab-host]
+gitlab.tiinamu.ru ansible_host=192.168.102.9 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub
+[gitlab-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'
+
+[runner-host]
+runner.tiinamu.ru ansible_host=192.168.102.10 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub
+[runner-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'
+
+[monitoring-host]
+monitoring.tiinamu.ru ansible_host=192.168.102.11 ansible_user=ubuntu ansible_ssh_private_key_file=/home/artem/.ssh/id_rsa.pub
+[monitoring-host:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@51.250.73.164"'

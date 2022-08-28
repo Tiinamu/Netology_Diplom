@@ -1,0 +1,13 @@
+---
+# defaults file for mysql
+db_user:     wordpress
+db_password: wordpress
+db_name:     wordpress
+mysql_replication_master: mysql1.tiinamu.ru
+mysql_replication_user: db_adm
+mysql_replication_user_password: "Q1e$#eqw78"
+mysql_packages:
+  - mysql-server
+  - python3-mysqldb
+mysql_service: mysql
+mysql_conf_dir: "/etc/mysql"

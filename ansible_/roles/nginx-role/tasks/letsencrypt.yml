@@ -1,0 +1,83 @@
+- name: install certbot
+  become: true
+  apt:
+    name:
+      - certbot
+      - python3-certbot-nginx
+
+- name: copy certbot
+  become: true
+  copy:
+    src: ./cli.ini
+    dest: /etc/letsencrypt/cli.ini
+    mode: 0644
+
+- name: request sertificatres
+  become: true
+##  command: "certbot certonly --agree-tos --no-eff-email -q --email bancerev@gmail.com -d tiinamu.ru -d www.tiinamu.ru -d alertmanager.tiinamu.ru -d gitlab.tiinamu.ru -d grafana.tiinamu.ru -d prometheus.tiinamu.ru"
+  command: "certbot certonly --agree-tos --test-cert --no-eff-email -q --email bancerev@gmail.com -d tiinamu.ru -d www.tiinamu.ru -d gitlab.tiinamu.ru"
+
+
+#вставить про http
+- name: Copy http config
+  become: true
+  template:
+    src: templates/http.j2
+    dest: /etc/nginx/sites-available/http
+
+- name: Create directory for simple html
+  become: true
+  file:
+    name: /var/www/tiinamu.ru/html
+    state: directory
+
+- name: disable default site config
+  become: true
+  template:
+    src: templates/default.conf
+    dest: /etc/nginx/sites-enabled/default
+
+- name: Copy html file
+  become: true
+  template:
+    src: templates/nginx-html-index.j2
+    dest: /var/www/tiinamu.ru/html
+
+- name: Create a symbolic link
+  become: true
+  file:
+    src: /etc/nginx/sites-available/http
+    dest: /etc/nginx/sites-enabled/http
+    state: link
+    force: yes
+
+- name: restart nginx  
+  service: name=nginx state=restarted
+  become: true
+  become_method: sudo
+
+#вставить про https
+- name: Copy https config
+  become: true
+  template:
+    src: templates/https.j2
+    dest: /etc/nginx/sites-available/https
+
+- name: Create a symbolic link
+  become: true
+  file:
+    src: /etc/nginx/sites-available/https
+    dest: /etc/nginx/sites-enabled/https
+    state: link
+    force: yes
+
+- name: Copy http config with redirect
+  become: true
+  template:
+    src: templates/http_301.j2
+    dest: /etc/nginx/sites-available/http
+
+- name: restart nginx  
+  service: name=nginx state=restarted
+  become: true
+  become_method: sudo

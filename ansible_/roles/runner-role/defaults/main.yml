@@ -1,0 +1,4 @@
+---
+# defaults file for runner
+gitlab_runner_token: "GR1348741mwxxg9ekV2nEgT2vcmVW"
+domain: "tiinamu.ru"

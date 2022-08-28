@@ -1,0 +1,77 @@
+---
+# tasks file for alertmanager
+- name: Create group
+  become: true
+  group:
+    name: alertmanager
+    system: true
+    state: present
+
+- name: Create service user
+  become: true
+  user:
+    name: alertmanager
+    create_home: no
+    shell: "/usr/sbin/nologin"
+    group: prometheus
+
+- name: Create directories 
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: alertmanager
+    group: alertmanager
+  with_items:
+    - '/tmp/alertmanager'
+    - '/etc/alertmanager'
+    - '/var/lib/prometheus/alertmanager'
+
+- name: Download source files
+  become: true
+  unarchive:
+    src: https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz
+    dest: /tmp/alertmanager
+    creates: /tmp/alertmanager/alertmanager-0.24.0.linux-amd64
+    remote_src: yes
+
+- name: Copy source files
+  become: true
+  copy: 
+    src: /tmp/alertmanager/alertmanager-0.24.0.linux-amd64/{{ item }}
+    dest: /usr/local/bin/
+    remote_src: yes
+    mode: preserve
+    owner: alertmanager
+    group: alertmanager
+  with_items: 
+    - 'alertmanager'
+    - 'amtool' 
+
+- name: Copy config file
+  become: true
+  copy: 
+    src: /tmp/alertmanager/alertmanager-0.24.0.linux-amd64/alertmanager.yml
+    dest: /etc/alertmanager/
+    remote_src: yes
+    mode: preserve
+    owner: alertmanager
+    group: alertmanager
+
+- name: Create systemd service
+  become: true
+  template:
+    src: templates/alertmanager.service
+    dest: /etc/systemd/system/
+
+- name: Reload systemd
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Start service
+  become: true
+  systemd:
+    name: alertmanager
+    state: started
+    enabled: yes

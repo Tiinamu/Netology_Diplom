@@ -1,0 +1,17 @@
+---
+# defaults file for wordpress
+#System Settings
+php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip' ]
+#app_packages: [ 'apache2', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php', 'git' ]
+
+#MySQL Settings
+mysql_root_password: "root"
+mysql_db: "wordpress"
+mysql_user: "wordpress"
+mysql_password: "wordpress"
+mysql_server: "mysql1.tiinamu.ru"
+
+#HTTP Settings
+http_host: "www.tiinamu.ru"
+http_conf: "www.tiinamu.ru.conf"
+http_port: "80"

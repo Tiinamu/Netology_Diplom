@@ -1,0 +1,135 @@
+---
+#- name: Create directory for ssh-keys
+#  file: state=directory mode=0700 dest=/home/ubuntu/.ssh/
+#- name: Adding rsa-key in /home/ubuntu/.ssh/authorized_keys
+#  copy: src=/home/artem/.ssh/id_rsa.pub dest=/home/ubuntu/.ssh/authorized_keys owner=root mode=0600
+#  ignore_errors: yes
+
+#- name: Añadiendo nueva ruta por defecto... 
+#  command: ip route add default via 192.168.101.13
+
+- name: Install Mysql
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: 
+    - "{{ mysql_packages }}"
+
+
+- name: create db
+  become: true
+  mysql_db:
+     name: "{{ db_name }}"
+     state: present
+
+- name: create mysql user 
+  become: true
+  mysql_user:
+     name: "{{ db_user }}"
+     password: "{{ db_password }}"
+     priv: "{{ db_name }}.*:ALL"
+     host: '%'
+     state: present
+
+- name: Enable remote login to mysql
+  become: true
+  lineinfile:
+     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+     regexp: '^bind-address'
+     line: 'bind-address = 0.0.0.0'
+     backup: yes
+
+- name: restart mysql
+  become: true
+  systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+# rep task
+
+- name: Replace master.cnf
+  become: true
+  template:
+    src=templates/master.cnf
+    dest=/etc/mysql/mysql.conf.d/master.cnf
+  when:
+    - mysql_replication_role == 'master'
+    - mysql_replication_user is defined
+    - (mysql_replication_master | length) > 0
+ 
+- name: restart mysql
+  become: true
+  systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: Replace slave.cnf
+  become: true
+  template:
+    src=templates/slave.cnf
+    dest=/etc/mysql/mysql.conf.d/slave.cnf
+  when:
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+
+- name: restart mysql
+  become: true
+  systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  
+- name: check slave replication status
+  become: true
+  mysql_replication:
+    mode: getreplica
+  register: slave
+  when:
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+
+- name: check master replication status
+  become: true
+  mysql_replication: 
+    mode=getprimary
+  delegate_to: "{{ mysql_replication_master }}"
+  register: master
+  when:
+    - (slave.Is_Replica is defined and not slave.Is_Replica) or (slave.Is_Replica is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - (mysql_replication_master | length) > 0
+
+- name: configure replication on the slave
+  become: true
+  mysql_replication:
+    mode: changeprimary
+    primary_host: "{{ mysql_replication_master }}"
+    primary_user: "{{ mysql_replication_user }}"
+    primary_password: "{{ mysql_replication_user_password }}"
+    primary_log_file: "{{ master.File }}"
+    primary_log_pos: "{{ master.Position }}"
+  when:
+    - (slave.Is_Replica is defined and not slave.Is_Replica) or (slave.Is_Replica is not defined and slave is failed)
+    - mysql_replication_role == 'slave'
+    - mysql_replication_user is defined
+    - (mysql_replication_master | length) > 0
+
+- name: Start replica
+  become: true
+  mysql_replication:
+    mode: startreplica
+
+- name: restart mysql
+  become: true
+  systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
