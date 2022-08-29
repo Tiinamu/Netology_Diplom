@@ -216,7 +216,7 @@ artem@ubuntu:~/Netology_Diplom/terraform$ terraform apply
 
 2.13)	Настроим А-записи в REG.RU:
 
-![d_9](pictures/d_9.JPG)
+![d_9_1](pictures/d_9_1.PNG)
 
 2.14)	Проверим подключение к серверу с ролью reverse-proxy – nginx.tiinamu.ru
 
