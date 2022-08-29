@@ -204,7 +204,7 @@ artem@ubuntu:~/Netology_Diplom/terraform$ terraform apply
 
 ![d_6](pictures/d_6.JPG) 
 
-![d_7](pictures/d_7.JPG) 
+![d_7_1](pictures/d_7_1.PNG) 
 
 2.11)	DNS-серверы оставил от REG.RU
 
