@@ -493,7 +493,7 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 
 7.5)	Проверим в браузере, как открывается URL https://prometheus.tiinamu.ru
 
-![d_20](pictures/d_20.JPG)
+![d_20_1](pictures/d_20_1.PNG)
 
 7.6)	Проверим в браузере, как открывается URL https://alertmanager.tiinamu.ru
 
