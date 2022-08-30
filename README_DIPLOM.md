@@ -425,16 +425,30 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_compute_instance.runner
 ```
 
-5.2)	Дополним Playbook ролями gitlab-role, runner-role, добавим соответствующие tasks, дополним inventory и provision.yml
+6.2)	Дополним Playbook ролями gitlab-role, runner-role, добавим соответствующие tasks, дополним inventory и provision.yml
 Для доступа на gitlab.tiinamu.ru – {root/EgT2vcmVW!ql1}. К runner подключение автоматически через gitlab_runner_token: "GR1348741mwxxg9ekV2nEgT2vcmVW"
 
-5.3)	Проверим в браузере, как открывается URL https://gitlab.tiinamu.ru
+6.3)	Проверим в браузере, как открывается URL https://gitlab.tiinamu.ru
 
 ![d_14](pictures/d_14.JPG)
 
 ![d_15](pictures/d_15.JPG)
 
 ![d_16](pictures/d_16.JPG)
+
+6.4) Создадим тестовый проект в gitlab-е  test_wordpress
+
+![d_16_1](pictures/d_16_1.JPG)
+
+Создадим .gitlab-ci.yml, закоммитим. 
+Добавим ssh-key в Settings/CI/CD/Variables
+
+![d_16_2](pictures/d_16_2.JPG)
+
+Скорректируем аттрибут wp-block-post-title на главной странице проекта. 
+При commit в проект запускается deploy-job и изменения выливаются на сервер:
+
+![d_16_3](pictures/d_16_3.JPG)
 
 __7. Установка Prometheus, Alert Manager, Node Exporter и Grafana__
 
