@@ -438,17 +438,17 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 
 6.4) Создадим тестовый проект в gitlab-е  test_wordpress
 
-![d_16_1](pictures/d_16_1.JPG)
+![d_16_1](pictures/d_16_1.PNG)
 
 Создадим .gitlab-ci.yml, закоммитим. 
 Добавим ssh-key в Settings/CI/CD/Variables
 
-![d_16_2](pictures/d_16_2.JPG)
+![d_16_2](pictures/d_16_2.PNG)
 
 Скорректируем аттрибут wp-block-post-title на главной странице проекта. 
 При commit в проект запускается deploy-job и изменения выливаются на сервер:
 
-![d_16_3](pictures/d_16_3.JPG)
+![d_16_3](pictures/d_16_3.PNG)
 
 __7. Установка Prometheus, Alert Manager, Node Exporter и Grafana__
 
