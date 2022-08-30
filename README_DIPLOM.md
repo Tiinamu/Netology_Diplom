@@ -392,7 +392,7 @@ artem@ubuntu:~/Netology_Diplom2/terraform$ terraform apply -target=yandex_comput
 
 5.3)	Проверим в браузере, как открывается URL https://www.tiinamu.ru
 
-![d_13](pictures/d_13.JPG)
+![d_13](pictures/d_13.PNG)
 
 __6. Установка Gitlab CE и Gitlab Runner__
 
